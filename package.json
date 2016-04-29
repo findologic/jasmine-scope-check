@@ -1,0 +1,59 @@
+{
+  "name": "jasmine-scope-check",
+  "version": "0.1.0",
+  "description": "jasmine-scope-check scaffolded with generator-microjs v0.1.2.",
+  "author": {
+    "name": "FINDOLOGIC GmbH",
+    "email": "office@findologic.com",
+    "url": "https://github.com/findologic"
+  },
+  "homepage": "https://github.com/findologic/jasmine-scope-check",
+  "bugs": {
+    "url": "https://github.com/findologic/jasmine-scope-check/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://findologic.mit-license.org"
+    }
+  ],
+  "maintainers": [],
+  "contributors": [
+    {
+      "name": "Daniel Lamb",
+      "email": "dlamb.open.source@gmail.com",
+      "url": "https://github.com/daniellmb"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/findologic/jasmine-scope-check.git"
+  },
+  "main": "jasmine-scope-check.js",
+  "scripts": {
+    "test": "gulp"
+  },
+  "keywords": [
+    "jasmine",
+    "testing"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "*",
+    "gulp-complexity": "*",
+    "gulp-jshint": "*",
+    "gulp-rename": "*",
+    "gulp-replace": "*",
+    "gulp-uglify": "*",
+    "jasmine-core": "^2.4.1",
+    "jshint": "^2.9.2",
+    "karma": "^0.13.22",
+    "karma-coverage": "*",
+    "karma-jasmine": "^0.3.8",
+    "karma-phantomjs-launcher": "*",
+    "phantomjs-prebuilt": "^2.1.7"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}
