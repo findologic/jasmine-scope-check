@@ -5,12 +5,17 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     replace = require('gulp-replace'),
     karma = require('gulp-karma'),
+    concat = require('gulp-concat'),
     fs = require('fs'),
     source = 'jasmine-scope-check.js',
     sourceMin = 'jasmine-scope-check.min.js',
+    dependencies = [
+      'node_modules/deep-diff/index.js',
+      'node_modules/lodash/lodash.js'
+    ],
     specs = 'test/spec/*.spec.js',
     karmaConf = 'test/karma.conf',
-    umdWrapper = fs.readFileSync('./.umd');
+    distDir = 'dist/';
 
 gulp.task('lint', function () {
   return gulp.src([source, specs])
@@ -23,35 +28,40 @@ gulp.task('gpa', function () {
   return gulp.src([source, specs])
     .pipe(complexity({
       cyclomatic: [8],
-      halstead: [9],
+      halstead: [20],
       maintainability: [100]
     }));
 });
 
 gulp.task('test', function () {
-  return gulp.src([source, specs])
+  return gulp.src(dependencies.concat([source, specs]))
     .pipe(karma({
       configFile: karmaConf + '.js'
     }));
 });
 
 gulp.task('min', function () {
-  return gulp.src(source)
-    .pipe(rename(sourceMin))
+  return gulp.src(dependencies.concat([source]))
+    .pipe(concat(sourceMin))
     .pipe(uglify({
       outSourceMap: true
     }))
-    .pipe(replace(/(.*)/, umdWrapper))
-    .pipe(gulp.dest('.'));
+    .pipe(gulp.dest(distDir));
+});
+
+gulp.task('build', function () {
+  return gulp.src(dependencies.concat([source]))
+    .pipe(concat(source))
+    .pipe(gulp.dest(distDir));
 });
 
 
 gulp.task('test-min', ['min'], function () {
-  return gulp.src([sourceMin, specs])
+  return gulp.src(dependencies.concat([distDir + sourceMin, specs]))
     .pipe(karma({
       configFile: karmaConf + '.js',
       reporters: ['dots']
     }));
 });
 
-gulp.task('default', ['lint', 'gpa', 'test', 'test-min']);
+gulp.task('default', ['lint', 'gpa', 'test', 'test-min', 'build']);

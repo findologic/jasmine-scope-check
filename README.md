@@ -15,6 +15,73 @@ because modifying `window` may break other people's stuff.
 
 ## How to use it
 
+Install the scope check before running any specs:
+
+```
+new JasmineScopeCheck({
+  globalObject: window
+}).install(beforeEach, afterEach);
+```
+
+Used like this, a default white list is used that fits a typical browser-Jasmine environment.
+
+### Options
+
+The following properties can be passed to the `JasmineScopeCheck` constructor:
+
+* `expect` (default = `globalObject.expect`): Jasmine's `expect` function.
+* `whiteList` (default = `[]`): An array of strings and/or regular expressions that specify property paths that may
+  change without causing broken expectations. A property path constructed of hierarchical property names from top to
+  bottom, separated by dots.
+* `maxRecursionDepth` (default = `4`): Properties that are this number of steps removed from `globalObject` are no
+  longer checked for changes, which is necessary for performance.
+* `useDefaultWhiteList` (default = `true`): By setting this to `false`, only `whiteList` is used for ignoring properties
+  that may be changed legitimately. Otherwise, the default white list is used in conjunction with `whiteList`.
+
+### Manual use
+
+In an environment where mechanisms such as Jasmine 2's global `beforeEach()` and `afterEach()` are not available, the
+scope check can be invoked manually:
+
+```
+var myScope = {};
+var scopeCheck = new JasmineScopeCheck({
+  globalObject = myScope
+});
+// Change things in myScope.
+scopeCheck.compareGlobalSnapshotWithReality();
+// Changes are tracked in: scopeCheck.addedProperties, scopeCheck.changedProperties, scopeCheck.removedProperties.
+// Before doing some more changes that should be tracked independently, reset the state:
+scopeCheck.reset();
+```
+
+### Which file to include
+
+* `dist/jasmine-scope-check.js` if you're not afraid of library conflicts (see TODO below).
+* `dist/jasmine-scope-check.min.js` if for whatever reason your test helpers need to be smaller.
+* `jasmine-scope-check.js` if you bring the dependencies (lodash, deep-diff) yourself.
+
+## TODO
+
+* Currently, properties belonging to functions are not checked for changes due to an
+  [upstream issue](https://github.com/flitbit/diff/issues/69).
+* Dependencies are currently exposed in `dist/*.js`, which may lead to conflicts with other versions of lodash and
+  deep-diff.
+* The default white-list is rather specific and could do with some enhancements.
+  
+## Change Log
+
+### v1.0.0
+
+* Additions, changes and removal of properties are tracked.
+* `install()` method to wrap around all specs for comprehensive scope check coverage.
+
+## Acknowledgements
+
+* The author and contributors of [flitbit/diff](https://github.com/flitbit/diff) take the pain out of recursive object
+  comparison.
+* FINDOLOGIC dedicated manpower to create and publish this initially internal tool.
+
 ## License
 
 (The MIT License)

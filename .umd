@@ -8,7 +8,7 @@
     module.exports = factory();
   } else {
     // Browser
-    window.jasmineScopeCheck = factory();
+    window.JasmineScopeCheck = factory();
   }
 }(this, function factory() {
   // public API

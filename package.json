@@ -1,26 +1,21 @@
 {
   "name": "jasmine-scope-check",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "jasmine-scope-check scaffolded with generator-microjs v0.1.2.",
   "author": {
     "name": "FINDOLOGIC GmbH",
-    "email": "office@findologic.com",
+    "email": "c.ortner@findologic.com",
     "url": "https://github.com/findologic"
   },
   "homepage": "https://github.com/findologic/jasmine-scope-check",
   "bugs": {
     "url": "https://github.com/findologic/jasmine-scope-check/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://findologic.mit-license.org"
-    }
-  ],
+  "license": "MIT",
   "maintainers": [],
   "contributors": [
     {
-      "name": "Daniel Lamb",
+      "name": "Daniel Lamb (Yeoman generator author)",
       "email": "dlamb.open.source@gmail.com",
       "url": "https://github.com/daniellmb"
     }
@@ -37,14 +32,20 @@
     "jasmine",
     "testing"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "deep-diff": "^0.3.4",
+    "lodash": "^4.11.1"
+  },
   "devDependencies": {
     "gulp": "*",
     "gulp-complexity": "*",
+    "gulp-concat": "^2.6.0",
     "gulp-jshint": "*",
+    "gulp-karma": "*",
     "gulp-rename": "*",
     "gulp-replace": "*",
     "gulp-uglify": "*",
+    "gulp-watch": "^4.3.5",
     "jasmine-core": "^2.4.1",
     "jshint": "^2.9.2",
     "karma": "^0.13.22",
