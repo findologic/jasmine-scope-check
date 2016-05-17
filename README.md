@@ -29,6 +29,7 @@ Used like this, a default white list is used that fits a typical browser-Jasmine
 
 The following properties can be passed to the `JasmineScopeCheck` constructor:
 
+* `globalObject` (default = `window`): The object to check for changes.
 * `expect` (default = `globalObject.expect`): Jasmine's `expect` function.
 * `whiteList` (default = `[]`): An array of strings and/or regular expressions that specify property paths that may
   change without causing broken expectations. A property path constructed of hierarchical property names from top to
@@ -68,6 +69,19 @@ scopeCheck.reset();
 * Dependencies are currently exposed in `dist/*.js`, which may lead to conflicts with other versions of lodash and
   deep-diff.
 * The default white-list is rather specific and could do with some enhancements.
+
+## Development
+
+```
+# Clone the repo.
+git clone git@github.com:findologic/jasmine-scope-check.git
+# Install dependencies from NPM.
+npm install
+# Make sure that the gulp command is installed globally.
+npm install -g gulp
+# Run builds and tests to check that everything works.
+gulp
+```
   
 ## Change Log
 

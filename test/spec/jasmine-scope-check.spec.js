@@ -79,7 +79,14 @@ describe('jasmine-scope-check.js', function () {
           obj: {
             obj: {
               primitive1: 123,
-              primitive2: 'foobar'
+              primitive2: 'foobar',
+              obj: {
+                obj: {
+                  obj: {
+                    primitiveBeyondRecursionLimit: true
+                  }
+                }
+              }
             }
           }
         },
@@ -91,17 +98,6 @@ describe('jasmine-scope-check.js', function () {
         }
       };
       objectGraph.func.primitive = 456;
-      objectGraph.func.obj = {
-        obj: {
-          obj: {
-            obj: {
-              obj: {
-                primitiveBeyondRecursionLimit: true
-              }
-            }
-          }
-        }
-      };
 
       scopeCheck = new JasmineScopeCheck({
         globalObject: objectGraph,
@@ -113,7 +109,7 @@ describe('jasmine-scope-check.js', function () {
       objectGraph.primitive = 'barfoo'; // Changed property
       delete objectGraph.obj.obj.obj.primitive2; // Removed property
       objectGraph.func.primitive++; // Change property of a function
-      objectGraph.func.obj.obj.obj.obj.obj.primitiveBeyondRecursionLimit = false; // Change beyond observed depth
+      objectGraph.obj.obj.obj.obj.obj.obj.primitiveBeyondRecursionLimit = false; // Change beyond observed depth
       objectGraph.jsonCallback = function () {}; // Added property that is white-listed via string
       objectGraph.scopeCheck.primitive = true; // Changed property that is white-listed via regex
 
@@ -140,7 +136,7 @@ describe('jasmine-scope-check.js', function () {
 
     it('should not detect any changes beyond the recursion depth limit', function () {
         expect(scopeCheck.changedProperties).not.toContain(
-          'func.obj.obj.obj.obj.obj.primitiveBeyondRecursionLimit');
+          'obj.obj.obj.obj.obj.obj.primitiveBeyondRecursionLimit');
     });
 
     it('should allow changes under white-listed entries specified as string', function () {
@@ -178,7 +174,8 @@ describe('jasmine-scope-check.js', function () {
     describe('when the beforeEach callback is called', function () {
       beforeEach(function () {
         spyOn(scopeCheck, 'reset');
-        beforeEachSpy.calls.argsFor(0)[0]();
+        var beforeEachCallback = beforeEachSpy.calls.argsFor(0)[0];
+        beforeEachCallback();
       });
 
       it('should reset the scope check state state', function () {
@@ -190,7 +187,8 @@ describe('jasmine-scope-check.js', function () {
       beforeEach(function () {
         spyOn(scopeCheck, 'compareGlobalSnapshotWithReality');
         spyOn(scopeCheck, 'assertCleanScope');
-        afterEachSpy.calls.argsFor(0)[0]();
+        var afterEachCallback = afterEachSpy.calls.argsFor(0)[0];
+        afterEachCallback();
       });
 
       it('should compare the snapshot with the global object', function () {
@@ -204,34 +202,68 @@ describe('jasmine-scope-check.js', function () {
   });
 
   describe('when not using the default white list', function () {
+    var globalObject = {};
     var expectedWhiteListedProperty = 'somethingThatReallyNeedsToBeGlobal';
 
     beforeEach(function () {
       scopeCheck = new JasmineScopeCheck(_.defaults({
+        globalObject: globalObject,
         useDefaultWhiteList: false,
         whiteList: [expectedWhiteListedProperty]
       }, settings));
+
+      globalObject[expectedWhiteListedProperty] = true;
     });
 
     it('should consider only the provided entries', function () {
       expect(scopeCheck.whiteList.length).toEqual(1);
       expect(scopeCheck.whiteList).toContain(expectedWhiteListedProperty);
+
+      scopeCheck.compareGlobalSnapshotWithReality();
+      expect(scopeCheck.addedProperties.length).toEqual(0);
     });
   });
 
   describe('when using the default white list', function () {
+    var globalObject = {};
     var expectedWhiteListedProperty = 'somethingThatReallyNeedsToBeGlobal';
 
     beforeEach(function () {
       scopeCheck = new JasmineScopeCheck(_.defaults({
+        globalObject: globalObject,
         useDefaultWhiteList: true,
         whiteList: [expectedWhiteListedProperty]
       }, settings));
+
+      globalObject[expectedWhiteListedProperty] = true;
     });
 
     it('should consider provided entries in addition to the default rules', function () {
       expect(scopeCheck.whiteList.length).toBeGreaterThan(1);
       expect(scopeCheck.whiteList).toContain(expectedWhiteListedProperty);
+
+      scopeCheck.compareGlobalSnapshotWithReality();
+      expect(scopeCheck.addedProperties.length).toEqual(0);
+    });
+  });
+
+  describe('when providing a white list entry that is neither string nor regular expression', function () {
+    beforeEach(function () {
+      var globalObject = {
+        foo: 'bar'
+      };
+
+      scopeCheck = new JasmineScopeCheck(_.defaults({
+        globalObject: globalObject,
+        useDefaultWhiteList: false,
+        whiteList: [{}]
+      }, settings));
+    });
+
+    it('should throw an exception', function () {
+      expect(function () {
+        scopeCheck.compareGlobalSnapshotWithReality();
+      }).toThrow(new Error('Only strings and regular expressions may be used as white list rules.'));
     });
   });
 });

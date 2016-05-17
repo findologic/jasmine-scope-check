@@ -14,7 +14,10 @@
     <script>
       (function () {
         new JasmineScopeCheck({
-          globalObject: window
+          globalObject: window,
+          whiteList: [
+            'legitimatelyGlobal'
+          ]
         }).install(beforeEach, afterEach);
       } ());
     </script>

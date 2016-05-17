@@ -15,13 +15,13 @@
  *    // After a spec:
  *    scopeCheck.compareGlobalSnapshotWithReality();
  *    scopeCheck.assertCleanScope();
- *    
+ *
  *    // Or just install for the global beforeEach() and afterEach():
  *    scopeCheck.install(beforeEach, afterEach);
  *
  *
  * @param {{}} settings
- * @param {{}} settings.globalObject The object to watch for modifications (e.g. window).
+ * @param {{}} [settings.globalObject=window] The object to watch for modifications.
  * @param {function} [settings.expect] The Jasmine expect function, to check if the global scope remained clean.
  * @param {[]} [settings.whiteList=[]] Object paths as string or regular expression. If properties (and their children)
  *    matching a white list entry are changed, it is ignored.
@@ -38,7 +38,8 @@ function JasmineScopeCheck(settings) {
 
   settings = _.defaults(settings, {
     // Default settings.
-    expect: settings.globalObject.expect,
+    globalObject: window,
+    expect: window.expect,
     whiteList: [],
     maxRecursionDepth: 4,
     useDefaultWhiteList: true
@@ -91,7 +92,7 @@ function JasmineScopeCheck(settings) {
    * @param {string[]} path Object path to the property.
    * @param {string} property Name of the property.
    * @returns {boolean} Whether the property is white-listed or not.
-     */
+   */
   function isWhiteListed(path, property) {
     var isPropertyWhiteListed = false;
     var fullPath = path.concat([property]).join('.');
@@ -106,6 +107,8 @@ function JasmineScopeCheck(settings) {
         isPropertyWhiteListed = fullPath === entry;
       } else if (entry instanceof RegExp) {
         isPropertyWhiteListed = fullPath.match(entry) !== null;
+      } else {
+        throw new Error('Only strings and regular expressions may be used as white list rules.');
       }
 
       // Once the property matches a white list item, we don't have to check any further.
@@ -159,10 +162,10 @@ function JasmineScopeCheck(settings) {
           case 'A': // Added to array
             self.addedProperties.push(fullPath);
             break;
-          case 'E':
+          case 'E': // Edited
             self.changedProperties.push(fullPath);
             break;
-          case 'D':
+          case 'D': // Deleted
             self.removedProperties.push(fullPath);
             break;
         }
@@ -176,7 +179,7 @@ function JasmineScopeCheck(settings) {
    *
    * @param {function} jasmineBeforeFunc Jasmine's beforeEach() function.
    * @param {function} jasmineAfterFunc Jasmine's afterEach() function.
-     */
+   */
   this.install = function (jasmineBeforeFunc, jasmineAfterFunc) {
     jasmineBeforeFunc(function () {
       // Reset the internal state before every spec, so only changes within the spec are detected.

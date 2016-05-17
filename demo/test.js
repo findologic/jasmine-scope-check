@@ -34,4 +34,12 @@ describe('when polluting the global scope', function () {
       expect(true).toBe(true); // Jasmine would complain if there weren't any expectations.
     });
   });
+
+  describe('when globalizing something white-listed', function () {
+    it('should not cause problems', function () {
+      window.legitimatelyGlobal = true;
+
+      expect(true).toBe(true); // Jasmine would complain if there weren't any expectations.
+    });
+  })
 });
