@@ -10,8 +10,14 @@ This Jasmine extension is intended for browser code.
 It runs between each spec and verifies that the global scope (`window` object) was not changed by comparing its state
 before and after the spec, detecting additions, modifications and deletions of `window` properties.
 
-Use jasmine-scope-check if your code is used by third parties and/or runs in environments out of your control in,
-because modifying `window` may break other people's stuff.
+Static code analysis catches a lot of accidental globals, but if the assignment happens indirectly, you'd have to run
+the code to find what's wrong. This is what jasmine-scope-check does.
+
+jasmine-scope-check is for you if your code runs in a context out of your control. For example:
+
+1. Your app is embedded in a third party site.
+2. Other software uses your library.
+3. You just want to write damn good code.
 
 ## How to use it
 
@@ -25,6 +31,8 @@ new JasmineScopeCheck({
 
 Used like this, a default white list is used that fits a typical browser-Jasmine environment.
 
+See the `demo` directory for a real-world example.
+
 ### Options
 
 The following properties can be passed to the `JasmineScopeCheck` constructor:
@@ -32,7 +40,7 @@ The following properties can be passed to the `JasmineScopeCheck` constructor:
 * `globalObject` (default = `window`): The object to check for changes.
 * `expect` (default = `globalObject.expect`): Jasmine's `expect` function.
 * `whiteList` (default = `[]`): An array of strings and/or regular expressions that specify property paths that may
-  change without causing broken expectations. A property path constructed of hierarchical property names from top to
+  change without causing broken expectations. A property path consists of hierarchical property names from top to
   bottom, separated by dots.
 * `maxRecursionDepth` (default = `4`): Properties that are this number of steps removed from `globalObject` are no
   longer checked for changes, which is necessary for performance.

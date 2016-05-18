@@ -9,7 +9,6 @@ describe('jasmine-scope-check.js', function () {
     };
     settings = {
       globalObject: {},
-      globalObjectName: 'window',
       expect: function () {
         return expectReturnValue;
       },
@@ -110,7 +109,7 @@ describe('jasmine-scope-check.js', function () {
       delete objectGraph.obj.obj.obj.primitive2; // Removed property
       objectGraph.func.primitive++; // Change property of a function
       objectGraph.obj.obj.obj.obj.obj.obj.primitiveBeyondRecursionLimit = false; // Change beyond observed depth
-      objectGraph.jsonCallback = function () {}; // Added property that is white-listed via string
+      objectGraph.jQuery12345 = function () {}; // Added property that is white-listed via string
       objectGraph.scopeCheck.primitive = true; // Changed property that is white-listed via regex
 
       // Compare the snapshot with the modified graph, so we can expect certain things to have been detected.
@@ -140,7 +139,7 @@ describe('jasmine-scope-check.js', function () {
     });
 
     it('should allow changes under white-listed entries specified as string', function () {
-        expect(scopeCheck.addedProperties).not.toContain('jsonCallback');
+        expect(scopeCheck.addedProperties).not.toContain('jQuery12345');
     });
 
     it('should allow changes under white-listed entries specified as regular expression', function () {
@@ -204,6 +203,7 @@ describe('jasmine-scope-check.js', function () {
   describe('when not using the default white list', function () {
     var globalObject = {};
     var expectedWhiteListedProperty = 'somethingThatReallyNeedsToBeGlobal';
+    var expectedNonWhiteListedProperty = 'notWhiteListed';
 
     beforeEach(function () {
       scopeCheck = new JasmineScopeCheck(_.defaults({
@@ -213,6 +213,7 @@ describe('jasmine-scope-check.js', function () {
       }, settings));
 
       globalObject[expectedWhiteListedProperty] = true;
+      globalObject[expectedNonWhiteListedProperty] = true;
     });
 
     it('should consider only the provided entries', function () {
@@ -220,7 +221,7 @@ describe('jasmine-scope-check.js', function () {
       expect(scopeCheck.whiteList).toContain(expectedWhiteListedProperty);
 
       scopeCheck.compareGlobalSnapshotWithReality();
-      expect(scopeCheck.addedProperties.length).toEqual(0);
+      expect(scopeCheck.addedProperties).toEqual([expectedNonWhiteListedProperty]);
     });
   });
 
