@@ -1,5 +1,9 @@
 language: node_js
 
+addons:
+  code_climate:
+    repo_token: 587f4b0f4745b131c5d936626d49b9c3781faea6a1d56c7c8eaced68220de503
+
 node_js:
   - '4'
   - '5'
@@ -9,7 +13,4 @@ before_script:
   - npm install -g codeclimate-test-reporter
 
 after_script:
-  - codeclimate < test/coverage/**/lcov.info
-
-env:
-  - CODECLIMATE_REPO_TOKEN=587f4b0f4745b131c5d936626d49b9c3781faea6a1d56c7c8eaced68220de503
+  - codeclimate-test-reporter < test/coverage/**/lcov.info
