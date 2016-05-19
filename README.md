@@ -150,4 +150,4 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 [downloads-image]: http://img.shields.io/npm/dm/jasmine-scope-check.png
 
 [npm-url]: https://www.npmjs.org/package/jasmine-scope-check
-[npm-image]: https://img.shields.io/npm/v/npm.svg?maxAge=2592000
+[npm-image]: https://img.shields.io/npm/v/jasmine-scope-check.svg?maxAge=2592000
