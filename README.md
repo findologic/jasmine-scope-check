@@ -89,6 +89,8 @@ npm install
 npm install -g gulp
 # Run builds and tests to check that everything works.
 gulp
+# (optional) Build documentation.
+gulp docs
 ```
   
 ## Change Log
@@ -150,4 +152,4 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 [downloads-image]: http://img.shields.io/npm/dm/jasmine-scope-check.png
 
 [npm-url]: https://www.npmjs.org/package/jasmine-scope-check
-[npm-image]: https://badge.fury.io/js/jasmine-scope-check.png
+[npm-image]: https://img.shields.io/npm/v/jasmine-scope-check.svg?maxAge=2592000

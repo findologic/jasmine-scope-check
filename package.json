@@ -1,7 +1,7 @@
 {
   "name": "jasmine-scope-check",
-  "version": "1.0.0",
-  "description": "jasmine-scope-check scaffolded with generator-microjs v0.1.2.",
+  "version": "1.0.2",
+  "description": "Static code analysis catches a lot of accidental globals, but if the assignment happens indirectly, you'd have to run the code to find what's wrong. This is what jasmine-scope-check does.",
   "author": {
     "name": "FINDOLOGIC GmbH",
     "email": "c.ortner@findologic.com",
@@ -12,7 +12,13 @@
     "url": "https://github.com/findologic/jasmine-scope-check/issues"
   },
   "license": "MIT",
-  "maintainers": [],
+  "maintainers": [
+    {
+      "name": "Christian Ortner",
+      "email": "c.ortner@findologic.com",
+      "url": "https://github.com/howard"
+    }
+  ],
   "contributors": [
     {
       "name": "Daniel Lamb (Yeoman generator author)",
@@ -40,6 +46,7 @@
     "gulp": "*",
     "gulp-complexity": "*",
     "gulp-concat": "^2.6.0",
+    "gulp-doxx": "0.0.5",
     "gulp-jshint": "*",
     "gulp-karma": "*",
     "gulp-rename": "*",
