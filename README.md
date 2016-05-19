@@ -89,6 +89,8 @@ npm install
 npm install -g gulp
 # Run builds and tests to check that everything works.
 gulp
+# (optional) Build documentation.
+gulp docs
 ```
   
 ## Change Log

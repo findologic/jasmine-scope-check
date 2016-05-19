@@ -23,7 +23,7 @@
  * @param {{}} settings
  * @param {{}} [settings.globalObject=window] The object to watch for modifications.
  * @param {function} [settings.expect] The Jasmine expect function, to check if the global scope remained clean.
- * @param {[]} [settings.whiteList=[]] Object paths as string or regular expression. If properties (and their children)
+ * @param {string[]|RegExp[]} [settings.whiteList=[]] Object paths as string or regular expression. If properties (and their children)
  *    matching a white list entry are changed, it is ignored.
  * @param {number} [settings.maxRecursionDepth=4] How deeply the scope check descends into the object graph.
  * @param {boolean} [settings.useDefaultWhiteList=true] If true (default), a set of curated default white list rules is

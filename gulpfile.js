@@ -6,6 +6,7 @@ var gulp = require('gulp'),
     replace = require('gulp-replace'),
     karma = require('gulp-karma'),
     concat = require('gulp-concat'),
+    gulpDoxx = require('gulp-doxx'),
     fs = require('fs'),
     source = 'jasmine-scope-check.js',
     sourceMin = 'jasmine-scope-check.min.js',
@@ -62,6 +63,14 @@ gulp.task('test-min', ['min'], function () {
       configFile: karmaConf + '.js',
       reporters: ['dots']
     }));
+});
+
+gulp.task('docs', function () {
+  gulp.src(['jasmine-scope-check.js', 'README.md'], { base: '.' })
+    .pipe(gulpDoxx({
+      title: 'jasmine-scope-check'
+    }))
+    .pipe(gulp.dest('docs'));
 });
 
 gulp.task('default', ['lint', 'gpa', 'test', 'test-min', 'build']);
