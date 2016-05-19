@@ -154,12 +154,14 @@ function JasmineScopeCheck(settings) {
    * compareGlobalSnapshotWithReality().
    */
   this.assertCleanScope = function () {
-    settings.expect(this.addedProperties.length).toEqual(0,
-      'Properties added to global scope: ' + this.addedProperties.join(', '));
-    settings.expect(this.changedProperties.length).toEqual(0,
-      'Properties changed in global scope: ' + this.changedProperties.join(', '));
-    settings.expect(this.removedProperties.length).toEqual(0,
-      'Properties removed from global scope: ' + this.removedProperties.join(', '));
+    _.each({
+      addedProperties: 'added',
+      changedProperties: 'changed',
+      removedProperties: 'removed'
+    }, function (value, key) {
+      settings.expect(self[key].length).toEqual(0,
+        'Properties ' + value + ' in global scope: ' + self.addedProperties.join(', '));
+    });
   };
 
   /**
