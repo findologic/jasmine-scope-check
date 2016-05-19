@@ -203,7 +203,7 @@ describe('jasmine-scope-check.js', function () {
   describe('when not using the default white list', function () {
     var globalObject = {};
     var expectedWhiteListedProperty = 'somethingThatReallyNeedsToBeGlobal';
-    var expectedNonWhiteListedProperty = 'notWhiteListed';
+    var expectedNonWhiteListedProperty = 'jQuery1234';
 
     beforeEach(function () {
       scopeCheck = new JasmineScopeCheck(_.defaults({
